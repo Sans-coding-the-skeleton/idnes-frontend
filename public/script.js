@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadPosts() {
     try {
-        const response = await fetch('/api/webnews/posts'); 
+        const response = await fetch('/webnews/posts'); 
         
         if (!response.ok) {
             throw new Error('Chyba při načítání článků');
