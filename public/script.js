@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadPosts() {
     try {
-        const response = await fetch('/api/posts');
+        const response = await fetch('/api/webnews/posts'); 
         
         if (!response.ok) {
             throw new Error('Chyba při načítání článků');
@@ -25,27 +25,26 @@ function displayPosts(posts) {
         container.innerHTML = '<div class="post">Žádné články k zobrazení</div>';
         return;
     }
-    
-    // Seřadit články od nejnovějšího
-    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    posts.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
     
     container.innerHTML = posts.map(post => `
         <div class="post">
             <div class="post-meta">
                 <span class="author">${escapeHtml(post.author || 'Redakce iDnes')}</span>
-                <span class="date">${formatDate(post.date)}</span>
+                <span class="date">${formatDate(post.createdDate)}</span>
                 <span class="category">${escapeHtml(post.category || 'zprávy')}</span>
             </div>
             
-            <h2>${escapeHtml(post.title || 'Bez názvu')}</h2>
-            
+            <h2>${escapeHtml(post.headline || 'Bez názvu')}</h2>
+
             <div class="content">${escapeHtml(post.content || 'Žádný obsah')}</div>
-            
+
             <div class="post-stats">
-                <span>👁️ ${post.views || 0} zhlédnutí</span>
-                <span>💬 ${post.comments || 0} komentářů</span>
+                <span> ${post.num_posts || 0} zhlédnutí</span>
+                <span> ${post.comment_count || 0} komentářů</span>
             </div>
-            
+
             ${post.tags && post.tags.length > 0 ? `
                 <div class="tags">
                     ${post.tags.map(tag => `<span class="tag">#${escapeHtml(tag)}</span>`).join('')}
